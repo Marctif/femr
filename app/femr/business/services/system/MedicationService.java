@@ -372,7 +372,7 @@ public class MedicationService implements IMedicationService {
 
         if (StringUtils.isNullOrWhiteSpace(medicationName)) {
 
-            response.addError("", "medicationName can't be null or empty");
+           // response.addError("", "medicationName can't be null or empty");
             return response;
         }
 
