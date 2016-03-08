@@ -208,15 +208,18 @@ public class TriageController extends Controller {
             newVitals.put("oxygenSaturation", viewModel.getOxygenSaturation());
         }
 
-
         if (viewModel.getHeightFeet() != null) {
+            Float feet = new Float(0);
+            if (viewModel.getHeightInches() != null)
+                feet = viewModel.getHeightInches() / (new Float(12));
+
             Float heightFeet = viewModel.getHeightFeet().floatValue();
-            newVitals.put("heightFeet", heightFeet);
+            newVitals.put("heightFeet", heightFeet + feet );
         }
 
         if (viewModel.getHeightInches() != null) {
            Float heightInches = viewModel.getHeightInches().floatValue();
-            newVitals.put("heightInches", heightInches);
+            newVitals.put("heightInches", heightInches % 12);
         }
 
         //Alaa Serhan
