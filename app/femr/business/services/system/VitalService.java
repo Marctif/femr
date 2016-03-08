@@ -85,7 +85,18 @@ public class VitalService implements IVitalService {
         // Convert vitals to imperial for storing in DB
         if (isMetric())
             LocaleUnitConverter.toImperial(patientEncounterVitalMap);
+        if(patientEncounterVitalMap.containsKey("heightInches"))
+        {
+            Float inches = patientEncounterVitalMap.get("heightInches");
+            if( inches > 12){
+                Float remainderInches = inches % 12;
+                Float feet = (inches - remainderInches)/12;
+                patientEncounterVitalMap.put("heightInches", remainderInches);
+                patientEncounterVitalMap.put("heightFeet", feet + patientEncounterVitalMap.get("heightFeet"));
+            }
 
+
+        }
         for (String key : patientEncounterVitalMap.keySet()) {
             if (patientEncounterVitalMap.get(key) != null) {
                 query = QueryProvider.getVitalQuery().where().eq("name", key);
@@ -161,6 +172,7 @@ public class VitalService implements IVitalService {
 
                     query = QueryProvider.getVitalQuery().where().eq("name", key);
                     vital = vitalRepository.findOne(query);
+
                     patientEncounterVitals.add(dataModelMapper.createPatientEncounterVital(encounterId, userId, currentTime, vital.getId(), patientEncounterVitalMap.get(key)));
                 }
             }
