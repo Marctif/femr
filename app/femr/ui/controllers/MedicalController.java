@@ -142,6 +142,7 @@ public class MedicalController extends Controller {
         ServiceResponse<List<PrescriptionItem>> prescriptionItemServiceResponse = searchService.retrieveUnreplacedPrescriptionItems(patientEncounter.getId());
         if (prescriptionItemServiceResponse.hasErrors()) {
 
+
             throw new RuntimeException();
         }
         viewModelGet.setPrescriptionItems(prescriptionItemServiceResponse.getResponseObject());
@@ -343,7 +344,9 @@ public class MedicalController extends Controller {
                     null);
 
             if (createPrescriptionServiceResponse.hasErrors()){
-
+                for(Map.Entry<String, String> p : createPrescriptionServiceResponse.getErrors().entrySet())
+                    System.out.println(p.getKey() + "/" + p.getValue());
+                System.out.println("~~~~~~~~~~~~~~~~~~~~");
                 throw new RuntimeException();
             }
         }
