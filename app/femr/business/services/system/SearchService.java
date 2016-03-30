@@ -327,6 +327,7 @@ public class SearchService implements ISearchService {
 
             response.setResponseObject(prescriptionItems);
         } catch (Exception ex) {
+
             response.addError("exception", ex.getMessage());
         }
 
