@@ -18,7 +18,8 @@
 */
 package femr.business.services.system;
 
-import com.avaje.ebean.*;
+import com.avaje.ebean.ExpressionList;
+import com.avaje.ebean.Query;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Joiner;
@@ -37,7 +38,6 @@ import femr.data.models.core.*;
 import femr.data.models.mysql.*;
 import femr.util.calculations.dateUtils;
 import femr.util.stringhelpers.StringUtils;
-import org.jboss.netty.util.internal.StringUtil;
 import org.joda.time.DateTime;
 import play.libs.Json;
 
@@ -372,7 +372,7 @@ public class MedicationService implements IMedicationService {
 
         if (StringUtils.isNullOrWhiteSpace(medicationName)) {
 
-            //response.addError("", "medicationName can't be null or empty");
+            response.addError("", "medicationName can't be null or empty");
             return response;
         }
 
@@ -619,6 +619,30 @@ public class MedicationService implements IMedicationService {
             response.setResponseObject(returnObject);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
+            response.addError("exception", ex.getMessage());
+        }
+
+        return response;
+    }
+
+    @Override
+    public ServiceResponse<MedicationItem> removeMedication(int medicationID) {
+        ServiceResponse<MedicationItem> response = new ServiceResponse<>();
+        try{
+
+            // Get the medication Item by it's ID
+            IMedication medication;
+            ExpressionList<Medication> medicationQuery = QueryProvider.getMedicationQuery()
+                    .where()
+                    .eq("id", medicationID);
+
+            // Find one medication (should only be 1 with the ID) from the database
+            medication = medicationRepository.findOne(medicationQuery);
+
+            medicationRepository.delete(medication);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
             response.addError("exception", ex.getMessage());
         }
 
