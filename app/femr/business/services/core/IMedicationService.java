@@ -77,34 +77,18 @@ public interface IMedicationService {
     ServiceResponse<List<PrescriptionItem>> dispensePrescriptions(Map<Integer, Boolean> prescriptionsToDispense);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Adds a new medication to the system. Does NOT update inventory quantities.
      *
-     * @param name name of the medication, not null
-     * @param form form of the medication (e.g. caps/capsules), may be null
+     * @param name              name of the medication, not null
+     * @param form              form of the medication (e.g. caps/capsules), may be null
      * @param activeIngredients active ingredients in the medication, may be null
      * @return a service response that contains a MedicationItem representing the medication that was just created
      * and/or errors if they exist.
      */
-    ServiceResponse<MedicationItem> createMedication(String name, String form, List<MedicationItem.ActiveIngredient> activeIngredients);
+    default ServiceResponse<MedicationItem> createMedication(String name, String form, List<MedicationItem.ActiveIngredient> activeIngredients) {
+        return null;
+    }
 
     /**
      * Deletes/marks deleted a medication by it's ID
@@ -161,4 +145,6 @@ public interface IMedicationService {
      * and/or errors if they exist
      */
     ServiceResponse<ObjectNode> retrieveAllMedicationsWithID();
+
+    ServiceResponse<MedicationItem> removeMedication(int id);
 }
