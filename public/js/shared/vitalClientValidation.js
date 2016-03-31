@@ -36,24 +36,35 @@ var vitalClientValidator = function (vitalElements) {
         vitalElements.weight.css('border-color', 'red');
         isValid = false;
     }
-    //Height - Feet
-    if ($.trim(vitalElements.heightFeet.val().length) > 0 && integerCheck(vitalElements.heightFeet.val()) === false) {
-        vitalElements.heightFeet.css('border-color', 'red');
-        isValid = false;
-    }
-    //Height - Inches
+    var maxHeight = (isMetric) ? 100 : 12;
+    var excessHeight = 0
+
     if ($.trim(vitalElements.heightInches.val().length) > 0 && integerCheck(vitalElements.heightInches.val()) === false) {
         vitalElements.heightInches.attr("placeholder", "Enter a Number");
         vitalElements.heightInches.css('border-color', 'red');
         isValid = false;
     }
+    else{
+        excessHeight = vitalElements.heightInches.val() / maxHeight
+    }
+    //Height - Feet
+    if ($.trim(vitalElements.heightFeet.val().length) > 0 && integerCheck(vitalElements.heightFeet.val()) === false) {
+        if(excessHeight === 0) {
+            vitalElements.heightFeet.css('border-color', 'red');
+            isValid = false;
+        }
+    }
+    //Height - Inches
+
     //Height - Inches less than 12, CM less than 100
-    var maxHeight = (isMetric) ? 100 : 12;
-    if ($.trim(vitalElements.heightInches.val()) >= maxHeight) {
+
+    /*if ($.trim(vitalElements.heightInches.val()) >= maxHeight) {
         vitalElements.heightInches.attr("placeholder", "Max value: " + (maxHeight - 1));
         vitalElements.heightInches.css('border-color', 'red');
         isValid = false;
-    }
+    }*/
+
+
     //Glucose
     if ($.trim(vitalElements.glucose.val().length) > 0 && integerCheck(vitalElements.glucose.val()) === false) {
         vitalElements.glucose.css('border-color', 'red');
